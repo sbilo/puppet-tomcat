@@ -24,7 +24,14 @@ class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
     
     include concat::setup
 
-    package { ["tomcat${version}", 'libtcnative-1', 'liblog4j1.2-java', 'libcommons-logging-java']: ensure => held, }
+    package {[
+        "tomcat${version}",
+        'libtcnative-1',
+        'liblog4j1.2-java',
+        'libcommons-logging-java',
+    ]:
+        ensure => held,
+    } -> Tomcat::Instance <||>
 
     file { [$tomcat::params::root, $tomcat::params::home, '/etc/tomcat.d/',]:
         ensure => directory,
