@@ -241,6 +241,7 @@ define tomcat::instance (
         home     => $instance_home,
         password => '!',
         comment  => "${name} instance user",
+        shell    => '/bin/bash'
     }
 
     file { "/etc/tomcat.d/${name}":
