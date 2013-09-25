@@ -3,7 +3,7 @@ puppet-tomcat
 
 Puppet code for deploying and configuring Tomcat multi-instance on Debian-like servers.
 
-Depencendies:
+Dependencies:
 
     'ripienaar/concat', '>=0.2.0'
     'klangrud/profile_d', '>=0.0.1'
