@@ -234,7 +234,7 @@ define tomcat::instance (
         owner   => $name,
         group   => $name,
         content => template('tomcat/web.xml.erb'),
-        require => Package['tomcat'],
+        require => Class['tomcat'],
         notify  => Tomcat::Service[$name],
         mode    => '0640',
     }
