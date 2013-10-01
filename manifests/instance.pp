@@ -224,9 +224,13 @@ define tomcat::instance (
     }
 
     file { "${instance_home}/tomcat/conf/web.xml":
-        ensure => link,
-        target => "/etc/tomcat${tomcat::major_version}/web.xml",
-        notify => Tomcat::Service[$name],
+        ensure  => $ensure,
+        owner   => $name,
+        group   => $name,
+        content => template('tomcat/web.xml.erb'),
+        require => Package['tomcat'],
+        notify  => Tomcat::Service[$name],
+        mode    => '0640',
     }
 
     file { "${instance_home}/tomcat/bin/setenv.sh":

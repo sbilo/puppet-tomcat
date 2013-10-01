@@ -1,4 +1,4 @@
-# == Class: Tomcat 
+# == Class: Tomcat
 #
 # === Parameters
 #
@@ -21,7 +21,7 @@
 # Copyright 2013 Proteon.
 #
 class tomcat ($version = $tomcat::params::version, $major_version = $tomcat::params::major_version) inherits tomcat::params {
-    
+
     include concat::setup
 
     if($major_version == 7) {
@@ -30,8 +30,8 @@ class tomcat ($version = $tomcat::params::version, $major_version = $tomcat::par
             default  => $version,
         }
 
-        package { "tomcat7": 
-            ensure => $ensure 
+        package { 'tomcat7':
+            ensure => $ensure
         }
     }
 
@@ -40,12 +40,12 @@ class tomcat ($version = $tomcat::params::version, $major_version = $tomcat::par
             $version => held,
             default  => $version,
         }
-        package { "tomcat7":               
+        package { 'tomcat6':
             ensure => $ensure
         }
     }
-                                    
-    
+
+
     package { ['libtcnative-1', 'liblog4j1.2-java', 'libcommons-logging-java']: ensure => held, }
 
     file { [$tomcat::params::root, $tomcat::params::home, '/etc/tomcat.d/',]:
