@@ -37,22 +37,28 @@
 # Copyright 2013 Proteon.
 #
 define tomcat::instance (
-    $shutdown_port     = 8005,
-    $apr_enabled       = true,
-    $pidfile_enabled   = true,
-    $jmx_enabled       = false,
-    $jmx_ip            = '127.0.0.1',
-    $jmx_port          = 8050,
-    $jmx_ssl           = false,
-    $jmx_authenticate  = false,
-    $max_heap          = '1024m',
-    $min_heap          = '1024m',
-    $min_perm          = '384m',
-    $max_perm          = '384m',
-    $unpack_wars       = true,
-    $auto_deploy       = true,
-    $deploy_on_startup = true,
-    $ensure            = present,) {
+    $shutdown_port                  = 8005,
+    $apr_enabled                    = true,
+    $pidfile_enabled                = true,
+    $jmx_enabled                    = false,
+    $jmx_ip                         = '127.0.0.1',
+    $jmx_port                       = 8050,
+    $jmx_ssl                        = false,
+    $jmx_authenticate               = false,
+    $max_heap                       = '1024m',
+    $min_heap                       = '1024m',
+    $min_perm                       = '384m',
+    $max_perm                       = '384m',
+    $unpack_wars                    = true,
+    $auto_deploy                    = true,
+    $deploy_on_startup              = true,
+    $ensure                         = present,
+    $jsp_development                = false,
+    $jsp_fork                       = true,
+    $jsp_gen_string_as_char_array   = true,
+    $jsp_modification_test_interval = 4,
+    $jsp_trim_spaces                = true,
+    $jsp_x_powered_by               = false) {
     include tomcat
 
     $instance_home = "${tomcat::params::home}/${name}"
