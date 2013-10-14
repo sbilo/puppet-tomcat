@@ -57,7 +57,7 @@ define tomcat::instance (
     $jsp_fork                       = true,
     $jsp_gen_string_as_char_array   = true,
     $jsp_modification_test_interval = 4,
-    $jsp_trim_spaces                = true,
+    $jsp_trim_spaces                = false,
     $jsp_x_powered_by               = false) {
     include tomcat
 
