@@ -25,7 +25,6 @@ define tomcat::connector::https (
     $uri_encoding             = 'UTF-8',
     $max_threads              = 800,
     $min_spare_threads        = 80,
-    $max_spare_threads        = 160,
     $compression              = 'on',
     $compressable_mime_type   = 'text/html,text/xml,text/plain',) {
     tomcat::connector { $name:
@@ -56,9 +55,6 @@ define tomcat::connector::https (
             }
             , {
                 'minSpareThreads' => $min_spare_threads
-            }
-            , {
-                'maxSpareThreads' => $max_spare_threads
             }
             , {
                 'compression' => $compression
