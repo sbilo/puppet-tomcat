@@ -13,12 +13,17 @@
 # Copyright 2013 Proteon.
 #
 define tomcat::connector::http (
-    $ensure       = present,
-    $instance     = $name,
-    $address      = '0.0.0.0',
-    $port         = 8080,
-    $scheme       = 'http',
-    $uri_encoding = 'UTF-8',) {
+    $ensure                 = present,
+    $instance               = $name,
+    $address                = '0.0.0.0',
+    $port                   = 8080,
+    $scheme                 = 'http',
+    $uri_encoding           = 'UTF-8',
+    $max_threads            = 800,
+    $min_spare_threads      = 80,
+    $max_spare_threads      = 160,
+    $compression            = 'on',
+    $compressable_mime_type = 'text/html,text/xml,text/plain',) {
     tomcat::connector { $instance:
         ensure       => $ensure,
         instance     => $instance,
@@ -29,6 +34,21 @@ define tomcat::connector::http (
             }
             , {
                 'scheme' => $scheme
+            }
+            , {
+                'maxThreads' => $max_threads
+            }
+            , {
+                'minSpareThreads' => $min_spare_threads
+            }
+            , {
+                'maxSpareThreads' => $max_spare_threads
+            }
+            , {
+                'compression' => $compression
+            }
+            , {
+                'compressableMimeType' => $compressable_mime_type
             }
             ]
     }
