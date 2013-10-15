@@ -39,13 +39,20 @@ define tomcat::webapp::maven (
     include maven
     include tomcat
 
-    maven { "${tomcat::params::home}/${instance}/tomcat/webapps/${webapp}.war":
-        groupid    => $groupid,
-        artifactid => $artifactid,
-        version    => $version,
-        packaging  => 'war',
-        repos      => $repos,
-        require    => [File["${tomcat::params::home}/${instance}/tomcat/webapps"], Package['maven']],
-        notify     => $notify,
+    if (!defined(Maven["/usr/share/java/${artifactid}-${version}.war"])) {
+        maven { "/usr/share/java/${artifactid}-${version}.war":
+            groupid    => $groupid,
+            artifactid => $artifactid,
+            version    => $version,
+            packaging  => 'war',
+            repos      => $repos,
+        }
+    }
+
+    file { "${tomcat::params::home}/${instance}/tomcat/webapps/${webapp}.war":
+        ensure  => 'link',
+        target  => "/usr/share/java/${artifactid}-${version}.war",
+        force   => true,
+        require => Maven["/usr/share/java/${artifactid}-${version}.war"],
     }
 }

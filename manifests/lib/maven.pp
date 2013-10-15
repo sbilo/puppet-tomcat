@@ -31,14 +31,22 @@
 #
 define tomcat::lib::maven ($lib = "${name}.jar", $instance, $groupid, $artifactid, $version, $repos =[]) {
     include ::maven
+
+    if (!defined(Maven["/usr/share/java/${artifactid}-${version}.jar"])) {
+        maven { "/usr/share/java/${artifactid}-${version}.jar":
+            groupid    => $groupid,
+            artifactid => $artifactid,
+            version    => $version,
+            packaging  => 'jar',
+            repos      => $repos,
+        }
+    }
     
-    maven { "${tomcat::params::home}/${instance}/tomcat/lib/${lib}":
-        groupid    => $groupid,
-        artifactid => $artifactid,
-        version    => $version,
-        packaging  => 'jar',
-        repos      => $repos,
-        notify     => Tomcat::Instance[$instance],
-        require    => Package['maven'],
+    file { "${tomcat::params::home}/${instance}/tomcat/lib/${lib}":
+        ensure     => 'link',
+        target     => "/usr/share/java/${artifactid}-${version}.jar",
+        force      => true,
+        require    => Maven["/usr/share/java/${artifactid}-${version}.jar"],
+        notify     => Tomcat::Service[$instance],
     }
 }

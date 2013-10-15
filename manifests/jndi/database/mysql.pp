@@ -85,13 +85,13 @@ define tomcat::jndi::database::mysql (
         ],
     }
 
-    if(!defined(Tomcat::Lib::Maven["${instance}:mysql-connector-java-5.1.24"])) {
-	    tomcat::lib::maven { "${instance}:mysql-connector-java-5.1.24":
-	        lib        => 'mysql-connector-java-5.1.24.jar',
+    if(!defined(Tomcat::Lib::Maven["${instance}:mysql-connector-java"])) {
+	    tomcat::lib::maven { "${instance}:mysql-connector-java":
+	        lib        => 'mysql-connector-java.jar',
 	        instance   => $instance,
 	        groupid    => 'mysql',
 	        artifactid => 'mysql-connector-java',
-	        version    => '5.1.24',
+	        version    => '5.1.26',
 	    }
     }
 }
