@@ -194,7 +194,6 @@ define tomcat::instance (
         notify => Tomcat::Service[$name],
     }
 
-    # For using apparmor profiles per instance it needs a file instead of a symlink
     file { "${instance_home}/tomcat/bin/catalina.sh":
         ensure => file,
         source => "/usr/share/tomcat${tomcat::major_version}/bin/catalina.sh",

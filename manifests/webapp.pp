@@ -25,9 +25,21 @@
 #
 define tomcat::webapp ($webapp = $name, $instance, $source) {
 
+    $notify = $webapp ? {
+        'ROOT'  => Exec["${instance}:clean"],
+        default => undef,
+    }
+
     file { "${tomcat::params::home}/${instance}/tomcat/webapps/${webapp}.war":
         source  => $source,
         owner   => $instance,
         mode    => '0644',
+        notify  => $notify,
+    }
+
+    exec { "${instance}:clean":
+        command     => "/etc/init.d/tomcat stop --instance=${instance}; rm -rf ${tomcat::params::home}/${instance}/tomcat/webapps/ROOT ${tomcat::params::home}/${instance}/tomcat/temp/* ${tomcat::params::home}/${instance}/tomcat/work/*",
+        refreshonly => true,
+        notify      => Tomcat::Service[$instance],
     }
 }

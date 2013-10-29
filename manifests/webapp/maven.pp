@@ -39,6 +39,11 @@ define tomcat::webapp::maven (
     include maven
     include tomcat
 
+    $notify = $webapp ? {
+        'ROOT'  => Exec["${instance}:clean"],
+        default => undef,
+    }
+
     if (!defined(Maven["/usr/share/java/${artifactid}-${version}.war"])) {
         maven { "/usr/share/java/${artifactid}-${version}.war":
             groupid    => $groupid,
@@ -54,5 +59,12 @@ define tomcat::webapp::maven (
         target  => "/usr/share/java/${artifactid}-${version}.war",
         force   => true,
         require => Maven["/usr/share/java/${artifactid}-${version}.war"],
+        notify  => $notify,
+    }
+
+    exec { "${instance}:clean":
+        command     => "/etc/init.d/tomcat stop --instance=${instance}; rm -rf ${tomcat::params::home}/${instance}/tomcat/webapps/ROOT ${tomcat::params::home}/${instance}/tomcat/temp/* ${tomcat::params::home}/${instance}/tomcat/work/*",
+        refreshonly => true,
+        notify      => Tomcat::Service[$instance],
     }
 }
