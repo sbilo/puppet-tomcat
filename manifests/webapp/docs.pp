@@ -23,12 +23,12 @@
 define tomcat::webapp::docs ($instance = $name) {
     include tomcat
 
-    if (!defined(Package["tomcat${tomcat::version}-docs"])) {
-        package { "tomcat${tomcat::version}-docs": ensure => held, }
+    if (!defined(Package["tomcat${tomcat::major_version}-docs"])) {
+        package { "tomcat${tomcat::major_version}-docs": ensure => held, }
     }
 
     tomcat::context { "${instance}:docs.xml":
-        content  => "<Context path=\"/manager\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::version}-docs/docs\"></Context>",
+        content  => "<Context path=\"/docs\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::major_version}-docs/docs\"></Context>",
         context  => 'docs',
         instance => $instance,
         require  => Tomcat::Instance[$instance],

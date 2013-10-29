@@ -1,5 +1,5 @@
 name 'proteon-tomcat'
-version '0.1.14'
+version '0.1.15'
 
 author 'Sander Bilo'
 license 'Apache'
@@ -9,3 +9,5 @@ summary ''
 description ''
 dependency 'ripienaar/concat', '>=0.2.0'
 dependency 'klangrud/profile_d', '>=0.0.1'
+dependency 'proteon/maven', '>=1.0.1'
+dependency 'proteon/java', '>=0.1.6'

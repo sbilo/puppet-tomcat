@@ -4,8 +4,10 @@
 #
 # Document parameters here.
 #
-# [*instance*]
-# [*class_name*]
+# [*instance*]      The instance this definition should be installed in (see tomcat::instance).
+# [*class_name*]    The classname of the listener.
+# [*attributes*]    The parameters to pass to the class.
+# [*ensure*]        Ensure present or absent for this instance (experimental). Defaults to present
 #
 # === Variables
 #

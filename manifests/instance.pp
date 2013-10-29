@@ -4,14 +4,27 @@
 #
 # Document parameters here.
 #
-# [*shutdown_port*] The port the shutdown command can be issued to. Defaults to 8005.
-# [*apr_enabled*]   Enable apr. Defaults to true.
-# [*max_heap*]      Max heap space to use. Defaults to 1024m.
-# [*min_heap*]      Min heap space to use. Defaults to 1024m.
-# [*min_perm*]      Min permgen space. Defaults to 384m.
-# [*max_perm*]      Max permgen space. Defaults to 384m.
-# [*unpack_wars*]   Unpack wars. Defaults to true.
-# [*auto_deploy*]   Auto deploy wars. Defaults to true.
+# [*shutdown_port*]     The port the shutdown command can be issued to. Defaults to 8005.
+# [*apr_enabled*]       Enable apr. Defaults to true.
+# [*pidfile_enabled*]   Enable pid file. Defaults to true.
+# [*jmx_enabled*]       Enable jmx. Defaults to false,
+# [*jmx_ip*]            Ip address to bind jmx on. Defaults to '127.0.0.1',
+# [*jmx_port*]          Port to bind jmx on. Defaults to 8050,
+# [*jmx_ssl*]           Use ssl for jmx. Defaults to false,
+# [*jmx_authenticate*]  Use authentication on jmx. Defaults to false,
+# [*max_heap*]          Max heap space to use. Defaults to 1024m.
+# [*min_heap*]          Min heap space to use. Defaults to 1024m.
+# [*min_perm*]          Min permgen space. Defaults to 384m.
+# [*max_perm*]          Max permgen space. Defaults to 384m.
+# [*unpack_wars*]       Unpack wars. Defaults to true.
+# [*auto_deploy*]       Auto deploy wars. Defaults to true.
+# [*deploy_on_startup*] Deploy applications on startup. Defaults to true.
+# [*java_version*]      Java installation to set in JAVA_HOME. See Proteon/Java module for all options. Defaults to openjdk_1_7_0.
+# [*catalina_opts*]     Array of extra catalina_opts. Defaults to '-d64', '-XX:SurvivorRatio=65536', '-XX:TargetSurvivorRatio=0', '-XX:MaxTenuringThreshold=0',
+#                       '-XX:+UseParNewGC', '-XX:ParallelGCThreads=2', '-XX:+UseConcMarkSweepGC', '-XX:+CMSParallelRemarkEnabled',
+#                       '-XX:+CMSCompactWhenClearAllSoftRefs', '-XX:CMSInitiatingOccupancyFraction=85', '-XX:+CMSScavengeBeforeRemark',
+#                       '-XX:+UseCompressedOops', '-XX:+DisableExplicitGC', '-Dfile.encoding=UTF-8'
+# [*ensure*]            Ensure present or absent for this instance (experimental). Defaults to present
 #
 # === Variables
 #
@@ -26,6 +39,8 @@
 #   max_perm      => '512m',
 #   unpack_wars   => false,
 #   auto_deploy   => true,
+#   java_version  => 'oracle_1_8_0',
+#   catalina_opts => ['-server, '-XX:+UseParNewGC', '-XX:ParallelGCThreads=2'],
 #  }
 #
 # === Authors
@@ -37,31 +52,38 @@
 # Copyright 2013 Proteon.
 #
 define tomcat::instance (
-    $shutdown_port                  = 8005,
-    $apr_enabled                    = true,
-    $pidfile_enabled                = true,
-    $jmx_enabled                    = false,
-    $jmx_ip                         = '127.0.0.1',
-    $jmx_port                       = 8050,
-    $jmx_ssl                        = false,
-    $jmx_authenticate               = false,
-    $max_heap                       = '1024m',
-    $min_heap                       = '1024m',
-    $min_perm                       = '384m',
-    $max_perm                       = '384m',
-    $unpack_wars                    = true,
-    $auto_deploy                    = true,
-    $deploy_on_startup              = true,
-    $ensure                         = present,
-    $jsp_development                = false,
-    $jsp_fork                       = true,
-    $jsp_gen_string_as_char_array   = true,
-    $jsp_modification_test_interval = 4,
-    $jsp_trim_spaces                = false,
-    $jsp_x_powered_by               = false) {
+    $shutdown_port     = 8005,
+    $apr_enabled       = true,
+    $pidfile_enabled   = true,
+    $jmx_enabled       = false,
+    $jmx_ip            = '127.0.0.1',
+    $jmx_port          = 8050,
+    $jmx_ssl           = false,
+    $jmx_authenticate  = false,
+    $max_heap          = '1024m',
+    $min_heap          = '1024m',
+    $min_perm          = '384m',
+    $max_perm          = '384m',
+    $unpack_wars       = true,
+    $auto_deploy       = true,
+    $deploy_on_startup = true,
+    $java_version      = 'openjdk_1_7_0',
+    $catalina_opts     = ['-d64', '-XX:SurvivorRatio=65536', '-XX:TargetSurvivorRatio=0', '-XX:MaxTenuringThreshold=0',
+'-XX:+UseParNewGC', '-XX:ParallelGCThreads=2', '-XX:+UseConcMarkSweepGC', '-XX:+CMSParallelRemarkEnabled',
+'-XX:+CMSCompactWhenClearAllSoftRefs', '-XX:CMSInitiatingOccupancyFraction=85', '-XX:+CMSScavengeBeforeRemark',
+'-XX:+UseCompressedOops', '-XX:+DisableExplicitGC', '-Dfile.encoding=UTF-8'],
+    $ensure            = present,) {
     include tomcat
 
-    $instance_home = "${tomcat::params::home}/${name}"
+    $java_class_name = "::java::${java_version}"
+
+    if (!defined(Class[$java_class_name])) {
+        class { $java_class_name: }
+    }
+
+    $java_home_name = "::java::${java_version}::home"
+
+    $instance_home  = "${tomcat::params::home}/${name}"
 
     tomcat::service { $name:
         ensure => $ensure ? {
@@ -99,6 +121,19 @@ define tomcat::instance (
     tomcat::cluster::init { $name:
         ensure => $ensure,
         notify => Tomcat::Service[$name],
+    }
+
+    tomcat::web::init { $name:
+        ensure => $ensure,
+        notify => Tomcat::Service[$name],
+    }
+
+    if (!defined(Tomcat::Web::Servlet["${name}:default"])) {
+        tomcat::web::servlet::default { $name: }
+    }
+
+    if (!defined(Tomcat::Web::Servlet["${name}:jsp"])) {
+        tomcat::web::servlet::jsp { $name: }
     }
 
     if (!defined(Tomcat::Connector[$name])) {
@@ -150,7 +185,7 @@ define tomcat::instance (
         owner   => $name,
         group   => $name,
         mode    => '0640',
-        require => User[$name],
+        require => [User[$name],Class['tomcat']],
     }
 
     file { "${instance_home}/tomcat/bin/bootstrap.jar":
@@ -182,7 +217,7 @@ define tomcat::instance (
     }
 
     file { "${instance_home}/tomcat/bin/shutdown.sh":
-        ensure => file, # file instead of a link so it uses the instance catalina.sh
+        ensure => file,
         source => "/usr/share/tomcat${tomcat::major_version}/bin/shutdown.sh",
         owner  => 'root',
         group  => 'root',
@@ -191,7 +226,7 @@ define tomcat::instance (
     }
 
     file { "${instance_home}/tomcat/bin/startup.sh":
-        ensure => file, # file instead of a link so it uses the instance catalina.sh
+        ensure => file,
         source => "/usr/share/tomcat${tomcat::major_version}/bin/startup.sh",
         owner  => 'root',
         group  => 'root',
@@ -227,16 +262,6 @@ define tomcat::instance (
         ensure => link,
         target => "/etc/tomcat${tomcat::major_version}/policy.d",
         notify => Tomcat::Service[$name],
-    }
-
-    file { "${instance_home}/tomcat/conf/web.xml":
-        ensure  => $ensure,
-        owner   => $name,
-        group   => $name,
-        content => template('tomcat/web.xml.erb'),
-        require => Class['tomcat'],
-        notify  => Tomcat::Service[$name],
-        mode    => '0640',
     }
 
     file { "${instance_home}/tomcat/bin/setenv.sh":

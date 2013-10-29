@@ -8,10 +8,11 @@ Dependencies:
     'ripienaar/concat', '>=0.2.0'
     'klangrud/profile_d', '>=0.0.1'
     'proteon/maven', '>=1.0.1'
+    'proteon/java', '>=0.1.6'
 
 Basic usage
 -------------------------
-To install Tomcat
+To install Tomcat (optional)
 
     include tomcat
 
@@ -32,6 +33,8 @@ A slightly more complicated example
       max_perm      => '512m',
       unpack_wars   => false,
       auto_deploy   => false,
+      java_version  => 'oracle_1_8_0',
+      catalina_opts => ['-server, '-XX:+UseParNewGC', '-XX:ParallelGCThreads=2'],
     }
     
 Install a web application
@@ -76,7 +79,7 @@ To add a mysql database resource
       password	  		 => 'qwerty',
       host        		 => 'db_server_1',
       use_unicode 		 => false,
-      character_encoding 	 => 'UTF-8',
+      character_encoding => 'UTF-8',
     }
     
 To add an environment variable 

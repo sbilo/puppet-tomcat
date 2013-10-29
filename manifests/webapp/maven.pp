@@ -30,7 +30,7 @@
 # Copyright 2013 Proteon.
 #
 define tomcat::webapp::maven (
-    $webapp = "${name}.war",
+    $webapp = $name,
     $instance,
     $groupid,
     $artifactid,

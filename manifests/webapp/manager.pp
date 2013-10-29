@@ -21,21 +21,21 @@
 define tomcat::webapp::manager ($instance = $name) {
     include tomcat
 
-    if (!defined(Package["tomcat${tomcat::version}-admin"])) {
-        package { "tomcat${tomcat::version}-admin": ensure => held, }
+    if (!defined(Package["tomcat${tomcat::major_version}-admin"])) {
+        package { "tomcat${tomcat::major_version}-admin": ensure => held, }
     }
 
     tomcat::context { "${name} manager.xml":
-        content  => "<Context path=\"/manager\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::version}-admin/manager\"></Context>",
+        content  => "<Context path=\"/manager\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::major_version}-admin/manager\"></Context>",
         context  => 'manager',
         instance => $instance,
-        require  => Package["tomcat${tomcat::version}-admin"],
+        require  => Package["tomcat${tomcat::major_version}-admin"],
     }
 
     tomcat::context { "${name} host-manager.xml":
-        content  => "<Context path=\"/host-manager\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::version}-admin/host-manager\"></Context>",
+        content  => "<Context path=\"/host-manager\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::major_version}-admin/host-manager\"></Context>",
         context  => 'host-manager',
         instance => $instance,
-        require  => Package["tomcat${tomcat::version}-admin"],
+        require  => Package["tomcat${tomcat::major_version}-admin"],
     }
 }
