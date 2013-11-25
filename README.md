@@ -152,3 +152,7 @@ To add the example applications for instances
     tomcat::webapp::examples { 'tomcat_1':}
 
 This will make them available at /examples
+
+Upgrading / downgrading web-applications and libraries
+------------------------------------------------------
+When upgrading or downgrading applications installed using maven just update the artifact version number. In case of a ROOT application upgrade, the module will stop tomcat, remove the deployed application, clear out the temp and work directories and restart tomcat.
