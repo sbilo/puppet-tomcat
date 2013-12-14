@@ -2,7 +2,7 @@ name 'proteon-tomcat'
 version '0.1.15'
 
 author 'Sander Bilo'
-license 'Apache'
+license 'Apache 2.0'
 project_page 'https://github.com/Proteon/puppet-tomcat'
 source 'git://github.com/Proteon/puppet-tomcat.git'
 summary ''
