@@ -20,6 +20,8 @@
 # [*initial_size*] Initial pool size (defaults to 4).
 # [*max_active*] Max active connections (defaults to 8).
 # [*max_idle*] Minimal active connections (defaults to 4).
+# [*min_evictable_time*] Minimum time in miliseconds a connection should be idle before it can be evicted (defaults to 600000).
+# [*eviction_interval*] Interval in miliseconds at which is being checked for idle connections (defaults to 60000).
 # [*jmx_enabled*] Enable jmx for the connection pool (defaults to true),
 # [*validation_query*] The query to use to check if a connection is still valid (defaults to 'SELECT 1'),
 #
@@ -64,6 +66,8 @@ define tomcat::jndi::database::mysql (
     $initial_size       = '10',
     $max_active         = '100',
     $max_idle           = '10',
+    $min_evictable_time = '600000',
+    $eviction_interval  = '60000',
     $jmx_enabled        = true,
     $auto_reconnect     = true,
     $validation_query   = 'SELECT 1',
@@ -80,6 +84,8 @@ define tomcat::jndi::database::mysql (
             {'initialSize'=> $initial_size },
             {'maxActive' => $max_active },
             {'maxIdle' => $max_idle },
+            {'minEvictableIdleTimeMillis' => $min_evictable_time },
+            {'timeBetweenEvictionRunsMillis' => $eviction_interval },
             {'jmxEnabled' => $jmx_enabled },
             {'validationQuery' => $validation_query },
         ],
