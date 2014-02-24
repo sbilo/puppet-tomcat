@@ -24,7 +24,7 @@ define tomcat::webapp::default ($instance = $name) {
     include tomcat
 
     tomcat::context { "${instance}:ROOT.xml":
-        content  => "<Context path=\"/\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::major_version}-root/default_root\"></Context>",
+        content  => "<Context path=\"/\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::version}-root/default_root\"></Context>",
         context  => 'ROOT',
         instance => $instance,
     }

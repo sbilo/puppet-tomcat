@@ -165,7 +165,7 @@ define tomcat::instance (
         class_name => 'org.apache.catalina.core.JreMemoryLeakPreventionListener',
     }
 
-    if ($tomcat::major_version < 7) {
+    if ($tomcat::version < 7) {
         tomcat::listener { "${name}:org.apache.catalina.mbeans.ServerLifecycleListener":
             instance   => $name,
             class_name => 'org.apache.catalina.mbeans.ServerLifecycleListener',
@@ -190,13 +190,13 @@ define tomcat::instance (
 
     file { "${instance_home}/tomcat/bin/bootstrap.jar":
         ensure => link,
-        target => "/usr/share/tomcat${tomcat::major_version}/bin/bootstrap.jar",
+        target => "/usr/share/tomcat${tomcat::version}/bin/bootstrap.jar",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/bin/catalina.sh":
         ensure => file,
-        source => "/usr/share/tomcat${tomcat::major_version}/bin/catalina.sh",
+        source => "/usr/share/tomcat${tomcat::version}/bin/catalina.sh",
         owner  => 'root',
         group  => 'root',
         mode   => '755',
@@ -205,19 +205,19 @@ define tomcat::instance (
 
     file { "${instance_home}/tomcat/bin/digest.sh":
         ensure => link,
-        target => "/usr/share/tomcat${tomcat::major_version}/bin/digest.sh",
+        target => "/usr/share/tomcat${tomcat::version}/bin/digest.sh",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/bin/setclasspath.sh":
         ensure => link,
-        target => "/usr/share/tomcat${tomcat::major_version}/bin/setclasspath.sh",
+        target => "/usr/share/tomcat${tomcat::version}/bin/setclasspath.sh",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/bin/shutdown.sh":
         ensure => file,
-        source => "/usr/share/tomcat${tomcat::major_version}/bin/shutdown.sh",
+        source => "/usr/share/tomcat${tomcat::version}/bin/shutdown.sh",
         owner  => 'root',
         group  => 'root',
         mode   => '755',
@@ -226,7 +226,7 @@ define tomcat::instance (
 
     file { "${instance_home}/tomcat/bin/startup.sh":
         ensure => file,
-        source => "/usr/share/tomcat${tomcat::major_version}/bin/startup.sh",
+        source => "/usr/share/tomcat${tomcat::version}/bin/startup.sh",
         owner  => 'root',
         group  => 'root',
         mode   => '755',
@@ -235,31 +235,31 @@ define tomcat::instance (
 
     file { "${instance_home}/tomcat/bin/tool-wrapper.sh":
         ensure => link,
-        target => "/usr/share/tomcat${tomcat::major_version}/bin/tool-wrapper.sh",
+        target => "/usr/share/tomcat${tomcat::version}/bin/tool-wrapper.sh",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/bin/version.sh":
         ensure => link,
-        target => "/usr/share/tomcat${tomcat::major_version}/bin/version.sh",
+        target => "/usr/share/tomcat${tomcat::version}/bin/version.sh",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/conf/catalina.properties":
         ensure => link,
-        target => "/etc/tomcat${tomcat::major_version}/catalina.properties",
+        target => "/etc/tomcat${tomcat::version}/catalina.properties",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/conf/logging.properties":
         ensure => link,
-        target => "/etc/tomcat${tomcat::major_version}/logging.properties",
+        target => "/etc/tomcat${tomcat::version}/logging.properties",
         notify => Tomcat::Service[$name],
     }
 
     file { "${instance_home}/tomcat/conf/policy.d":
         ensure => link,
-        target => "/etc/tomcat${tomcat::major_version}/policy.d",
+        target => "/etc/tomcat${tomcat::version}/policy.d",
         notify => Tomcat::Service[$name],
     }
 

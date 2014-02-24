@@ -23,12 +23,12 @@
 define tomcat::webapp::examples ($instance = $name) {
     include tomcat
 
-    if (!defined(Package["tomcat${tomcat::major_version}-examples"])) {
-        package { "tomcat${tomcat::major_version}-examples": ensure => held, }
+    if (!defined(Package["tomcat${tomcat::version}-examples"])) {
+        package { "tomcat${tomcat::version}-examples": ensure => held, }
     }
 
     tomcat::context { "${instance}:examples.xml":
-        content  => "<Context path=\"/examples\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::major_version}-examples/examples\"></Context>",
+        content  => "<Context path=\"/examples\" privileged=\"true\" antiResourceLocking=\"false\" docBase=\"/usr/share/tomcat${tomcat::version}-examples/examples\"></Context>",
         context  => 'examples',
         instance => $instance,
         require  => Tomcat::Instance[$instance],
