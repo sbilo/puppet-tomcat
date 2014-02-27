@@ -97,7 +97,7 @@ define tomcat::jndi::database::mysql (
 	        instance   => $instance,
 	        groupid    => 'mysql',
 	        artifactid => 'mysql-connector-java',
-	        version    => '5.1.26',
+	        version    => '5.1.29',
 	    }
     }
 }

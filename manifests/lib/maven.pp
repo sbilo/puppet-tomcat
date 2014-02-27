@@ -29,24 +29,31 @@
 #
 # Copyright 2013 Proteon.
 #
-define tomcat::lib::maven ($lib = "${name}.jar", $instance, $groupid, $artifactid, $version, $repos =[]) {
-    include ::maven
+define tomcat::lib::maven ($lib = "${name}.jar", $instance, $groupid, $artifactid, $version, $classifier = undef, $repos = []) {
+  include ::maven
 
-    if (!defined(Maven["/usr/share/java/${artifactid}-${version}.jar"])) {
-        maven { "/usr/share/java/${artifactid}-${version}.jar":
-            groupid    => $groupid,
-            artifactid => $artifactid,
-            version    => $version,
-            packaging  => 'jar',
-            repos      => $repos,
-        }
+  if ($classifier) {
+    $suffix = "-${classifier}"
+  } else {
+    $suffix = ''
+  }
+
+  if (!defined(Maven["/usr/share/java/${artifactid}-${version}${suffix}.jar"])) {
+    maven { "/usr/share/java/${artifactid}-${version}${suffix}.jar":
+      groupid    => $groupid,
+      artifactid => $artifactid,
+      version    => $version,
+      packaging  => 'jar',
+      repos      => $repos,
+      classifier => $classifier,
     }
-    
-    file { "${tomcat::params::home}/${instance}/tomcat/lib/${lib}":
-        ensure     => 'link',
-        target     => "/usr/share/java/${artifactid}-${version}.jar",
-        force      => true,
-        require    => Maven["/usr/share/java/${artifactid}-${version}.jar"],
-        notify     => Tomcat::Service[$instance],
-    }
+  }
+
+  file { "${tomcat::params::home}/${instance}/tomcat/lib/${lib}":
+    ensure  => 'link',
+    target  => "/usr/share/java/${artifactid}-${version}${suffix}.jar",
+    force   => true,
+    require => Maven["/usr/share/java/${artifactid}-${version}${suffix}.jar"],
+    notify  => Tomcat::Service[$instance],
+  }
 }
