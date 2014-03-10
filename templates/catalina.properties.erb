@@ -1,12 +1,12 @@
-package.access=sun.,org.apache.catalina.,org.apache.coyote.,org.apache.tomcat.,org.apache.jasper.
+package.access=sun.,org.apache.catalina.,org.apache.coyote.,org.apache.tomcat.,org.apache.jasper.<% if(scope.lookupvar('::tomcat::version') == '6') %>,sun.beans.<% end %>
 
 package.definition=sun.,java.,org.apache.catalina.,org.apache.coyote.,org.apache.tomcat.,org.apache.jasper.
 
-common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,<% if !@tomcat_version %>${catalina.home}/lib,${catalina.home}/lib/*.jar,<% end -%>/var/lib/tomcat7/common/classes,/var/lib/tomcat7/common/*.jar
+common.loader=${catalina.base}/lib,${catalina.base}/lib/*.jar,<% if !@tomcat_version %>${catalina.home}/lib,${catalina.home}/lib/*.jar,<% end -%>/var/lib/tomcat<%= scope.lookupvar('::tomcat::version') %>/common/classes,/var/lib/tomcat<%= scope.lookupvar('::tomcat::version') %>/common/*.jar
 
-server.loader=/var/lib/tomcat7/server/classes,/var/lib/tomcat7/server/*.jar
+server.loader=/var/lib/tomcat<%= scope.lookupvar('::tomcat::version') %>/server/classes,/var/lib/tomcat<%= scope.lookupvar('::tomcat::version') %>/server/*.jar
 
-shared.loader=/var/lib/tomcat7/shared/classes,/var/lib/tomcat7/shared/*.jar
+shared.loader=/var/lib/tomcat<%= scope.lookupvar('::tomcat::version') %>/shared/classes,/var/lib/tomcat<%= scope.lookupvar('::tomcat::version') %>/shared/*.jar
 
 tomcat.util.scan.DefaultJarScanner.jarsToSkip=\
 bootstrap.jar,commons-daemon.jar,tomcat-juli.jar,\
