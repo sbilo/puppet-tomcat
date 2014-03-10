@@ -19,8 +19,8 @@ define tomcat::jndi::database::hsql (
         ],
     }
 
-    tomcat::lib::maven { "${instance}:hsqldb-2.2.9":
-        lib        => 'hsqldb-2.2.9.jar',
+    tomcat::lib::maven { "${instance}:hsqldb-2.3.0":
+        lib        => 'hsqldb.jar',
         instance   => $instance,
         groupid    => 'org.hsqldb',
         artifactid => 'hsqldb',
