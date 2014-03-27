@@ -1,9 +1,9 @@
 define tomcat::tomee::v1_6_0 ($instance = $name) {
-  
-  Tomcat::Lib::Maven {
-    instance => $instance, }
-  
+
+  Tomcat::Lib::Maven { instance => $instance, }
+
   tomcat::lib::maven { "${name}:activemq-broker.jar":
+    instance   => $instance,
     groupid    => 'org.apache.activemq',
     artifactid => 'activemq-broker',
     version    => '5.9.0',
@@ -11,6 +11,7 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
   }
 
   tomcat::lib::maven { "${name}:activemq-client.jar":
+    instance   => $instance,
     groupid    => 'org.apache.activemq',
     artifactid => 'activemq-client',
     version    => '5.9.0',
@@ -18,6 +19,7 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
   }
   
   tomcat::lib::maven { "${name}:activemq-openwire-legacy.jar":
+    instance   => $instance,
     groupid    => 'org.apache.activemq',
     artifactid => 'activemq-openwire-legacy',
     version    => '5.9.0',
@@ -25,6 +27,7 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
   }
 
   tomcat::lib::maven { "${name}:activemq-jdbc-store.jar":
+    instance   => $instance,
     groupid    => 'org.apache.activemq',
     artifactid => 'activemq-jdbc-store',
     version    => '5.9.0',
@@ -37,48 +40,55 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
     version    => '6.0-5',
     lib        => 'javaee-api-tomcat.jar',
     classifier => 'tomcat',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:myfaces-api.jar":
     groupid    => 'org.apache.myfaces.core',
     artifactid => 'myfaces-api',
     lib        => 'myfaces-api.jar',
-    version    => '2.1.13'
+    version    => '2.1.13',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:myfaces-impl.jar":
     groupid    => 'org.apache.myfaces.core',
     artifactid => 'myfaces-impl',
     lib        => 'myfaces-impl.jar',
-    version    => '2.1.13'
+    version    => '2.1.13',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:commons-codec.jar":
     groupid    => 'commons-codec',
     artifactid => 'commons-codec',
     lib        => 'commons-codec.jar',
-    version    => '1.7'
+    version    => '1.7',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:commons-digester.jar":
     groupid    => 'commons-digester',
     artifactid => 'commons-digester',
     lib        => 'commons-digester.jar',
-    version    => '1.8'
+    version    => '1.8',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:ecj.jar":
     groupid    => 'org.eclipse.jdt.core.compiler',
     artifactid => 'ecj',
     lib        => 'ecj.jar',
-    version    => '4.2.2'
+    version    => '4.2.2',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:gson.jar":
     groupid    => 'com.google.code.gson',
     artifactid => 'gson',
     lib        => 'gson.jar',
-    version    => '2.1'
+    version    => '2.1',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:hawtbuf.jar":
@@ -86,6 +96,7 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
     artifactid => 'hawtbuf',
     version    => '1.9',
     lib        => 'hawtbuf.jar',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:activemq-ra.jar":
@@ -93,6 +104,7 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
     artifactid => 'activemq-ra',
     version    => '5.9.0',
     lib        => 'activemq-ra.jar',
+    instance   => $instance,
   }
 
   tomcat::lib::maven { "${name}:activemq-kahadb-store.jar":

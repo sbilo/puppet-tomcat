@@ -114,13 +114,13 @@ define tomcat::instance (
     }
   }
 
-  if ($tomcat_version) {
-    Tomcat::Lib::Maven {
-      instance => $name,
-      groupid  => 'org.apache.tomcat',
-      version  => $tomcat_version,
-    }
+  Tomcat::Lib::Maven {
+    instance => $name,
+    groupid  => 'org.apache.tomcat',
+    version  => $tomcat_version,
+  }
 
+  if ($tomcat_version) {
     tomcat::lib::maven { "${name}:commons-pool":
       lib        => 'commons-pool.jar',
       groupid    => 'commons-pool',
@@ -238,7 +238,7 @@ define tomcat::instance (
   }
 
   if ($tomee_version) {
-    tomcat::tomee::init { 'tomee': version => $tomee_version }
+    tomcat::tomee::init { $name: version => $tomee_version }
   }
 
   $java_home_name = "::java::${java_version}::home"
