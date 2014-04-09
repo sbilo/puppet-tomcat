@@ -30,7 +30,7 @@ class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
         'liblog4j1.2-java',
         'libcommons-logging-java',
     ]:
-        ensure => held,
+        ensure => installed,
     } -> Tomcat::Instance <||>
 
     file { [$tomcat::params::root, $tomcat::params::home, '/etc/tomcat.d/',]:
