@@ -1,5 +1,6 @@
 define tomcat::tomee::v1_6_0 ($instance = $name) {
-
+  include tomcat
+  
   Tomcat::Lib::Maven { instance => $instance, }
 
   tomcat::lib::maven { "${name}:activemq-broker.jar":
@@ -590,11 +591,19 @@ define tomcat::tomee::v1_6_0 ($instance = $name) {
     lib        => 'xalan.jar',
   }
 
-  tomcat::lib::maven { "${name}:xercesImpl.jar":
+  #tomcat::lib::maven { "${name}:xercesImpl.jar":
+  #  groupid    => 'xerces',
+  #  artifactid => 'xercesImpl',
+  #  version    => '2.11.0',
+  #  lib        => 'xercesImpl.jar',
+  #}
+
+  maven { "${tomcat::params::home}/${instance}/tomcat/lib/xercesImpl.jar":
     groupid    => 'xerces',
     artifactid => 'xercesImpl',
     version    => '2.11.0',
-    lib        => 'xercesImpl.jar',
+    packaging  => 'jar',
+    notify     => Tomcat::Service[$instance],
   }
 
   tomcat::lib::maven { "${name}:xml-resolver.jar":
