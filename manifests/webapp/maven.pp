@@ -40,7 +40,7 @@ define tomcat::webapp::maven (
     include tomcat
 
     $notify = $webapp ? {
-        'ROOT'  => Exec["${instance}:clean"],
+        'ROOT'  => Exec["${name}@${instance}:clean"],
         default => undef,
     }
 
@@ -62,7 +62,7 @@ define tomcat::webapp::maven (
         notify  => $notify,
     }
 
-    exec { "${instance}:clean":
+    exec { "${name}@${instance}:clean":
         command     => "/etc/init.d/tomcat stop --instance=${instance}; rm -rf ${tomcat::params::home}/${instance}/tomcat/webapps/ROOT ${tomcat::params::home}/${instance}/tomcat/temp/* ${tomcat::params::home}/${instance}/tomcat/work/*",
         refreshonly => true,
         notify      => Tomcat::Service[$instance],
