@@ -51,6 +51,10 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
   }
 
   if($version == '1.6.0') {
-     tomcat::tomee::v1_6_0 { $instance: instance => $instance}
+    tomcat::tomee::v1_6_0 { $instance: instance => $instance}
+  }
+
+  if($version == '1.6.0.2') {
+    tomcat::tomee::v1_6_0_2 { $instance: instance => $instance}
   }
 }
