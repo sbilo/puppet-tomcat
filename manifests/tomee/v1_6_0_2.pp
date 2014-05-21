@@ -489,7 +489,7 @@ define tomcat::tomee::v1_6_0_2 ($instance = $name) {
   tomcat::lib::maven { "${name}:cxf-rt-ws-security.jar":
     groupid    => 'org.apache.cxf',
     artifactid => 'cxf-rt-ws-security',
-    version    => '2.6.9',
+    version    => '2.6.14',
     lib        => 'cxf-rt-ws-security.jar',
   }
 
@@ -623,14 +623,14 @@ define tomcat::tomee::v1_6_0_2 ($instance = $name) {
   tomcat::lib::maven { "${name}:cxf-rt-frontend-jaxrs.jar":
     groupid    => 'org.apache.cxf',
     artifactid => 'cxf-rt-frontend-jaxrs',
-    version    => '2.6.9',
+    version    => '2.6.14',
     lib        => 'cxf-rt-frontend-jaxrs.jar',
   }
 
   tomcat::lib::maven { "${name}:cxf-api.jar":
     groupid    => 'org.apache.cxf',
     artifactid => 'cxf-api',
-    version    => '2.6.9',
+    version    => '2.6.14',
     lib        => 'cxf-api.jar',
   }
 
