@@ -10,6 +10,7 @@
 #
 define tomcat::web::init (
     $instance          = $name,
+    $tomcat_version    = undef,
     $session_timeout   = 30,
     $welcome_files     = ['index.html', 'index.htm', 'index.jsp'],
     $ensure            = present,) {
@@ -26,7 +27,8 @@ define tomcat::web::init (
         concat::fragment { "Adding Default Serlvet web.xml top content for ${instance}":
             target  => "${tomcat::params::home}/${instance}/tomcat/conf/web.xml",
             order   => 00,
-            content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
+            content => $tomcat_version ? {
+                undef => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
 <!DOCTYPE web-app [
     <!ENTITY mime-mappings SYSTEM "web-mime-mappings.xml">
 ]>
@@ -36,6 +38,23 @@ define tomcat::web::init (
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     version="3.0">
 ',
+                '7.0.53' => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+',
+                default => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
+<!DOCTYPE web-app [
+    <!ENTITY mime-mappings SYSTEM "web-mime-mappings.xml">
+]>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">',
+            }
         }
 
         concat::fragment { "Adding Default Serlvet web.xml timeout config content for ${instance}":
@@ -57,9 +76,14 @@ define tomcat::web::init (
         concat::fragment { "Adding Default Serlvet web.xml file mime-mappings config content for ${instance}":
             target  => "${tomcat::params::home}/${instance}/tomcat/conf/web.xml",
             order   => 97,
-            content => '
+            content => $tomcat_version ? {
+                undef    => '
     &mime-mappings;
 ',
+                '7.0.53' => template('tomcat/web-mime-mappings.xml.erb'),
+                default  => '
+    &mime-mappings;
+',          }
         }
 
         concat::fragment { "Adding Default Serlvet web.xml welcome file config content for ${instance}":

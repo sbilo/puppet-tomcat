@@ -284,8 +284,9 @@ define tomcat::instance (
   }
 
   tomcat::web::init { $name:
-    ensure => $ensure,
-    notify => Tomcat::Service[$name],
+    ensure         => $ensure,
+    tomcat_version => $tomcat_version,
+    notify         => Tomcat::Service[$name],
   }
 
   if (!defined(Tomcat::Web::Servlet["${name}:default"])) {
