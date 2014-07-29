@@ -22,6 +22,7 @@ define tomcat::connector::http (
     $max_threads            = 800,
     $min_spare_threads      = 80,
     $compression            = 'on',
+    $secure                 = false,
     $compressable_mime_type = 'text/html,text/xml,text/plain',) {
     tomcat::connector { $instance:
         ensure       => $ensure,
@@ -45,6 +46,9 @@ define tomcat::connector::http (
             }
             , {
                 'compressableMimeType' => $compressable_mime_type
+            }
+            , {
+                'secure' => $secure
             }
             ]
     }
