@@ -24,7 +24,7 @@ define tomcat::connector::http (
     $compression            = 'on',
     $secure                 = false,
     $compressable_mime_type = 'text/html,text/xml,text/plain',) {
-    tomcat::connector { $instance:
+    tomcat::connector { $name:
         ensure       => $ensure,
         instance     => $instance,
         port         => $port,

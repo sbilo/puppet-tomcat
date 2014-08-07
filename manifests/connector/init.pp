@@ -10,8 +10,6 @@ define tomcat::connector::init (
     $instance = $name,
     $ensure   = present,) {
     if ($ensure != absent) {
-        include concat::setup
-
         concat { "${tomcat::params::home}/${instance}/tomcat/conf/connectors.xml":
             owner   => $instance,
             group   => $instance,

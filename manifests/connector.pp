@@ -24,6 +24,7 @@ define tomcat::connector (
     $uri_encoding = 'UTF-8',
     $attributes   = [],) {
     if ($ensure != absent) {
+        include concat::setup
         concat::fragment { "Adding ${name} Connector for ${instance}":
             target  => "${tomcat::params::home}/${instance}/tomcat/conf/connectors.xml",
             order   => 01,
