@@ -108,7 +108,10 @@ define tomcat::instance (
       groupid    => 'org.apache.tomcat',
       artifactid => 'tomcat-jdbc',
       version    => $tomcat_version ? {
-        undef    => '7.0.26',
+        undef    => $::lsbdistrelease ? {
+	  '12.04' => '7.0.26',
+  	  '14.04' => '7.0.52',
+	},
         default  => $tomcat_version,
       }
     }
