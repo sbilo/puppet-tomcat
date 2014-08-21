@@ -43,17 +43,14 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
   }
 
   if($version == '1.6.0') {
-    file {["${tomcat::params::home}/${instance}/tomcat/bin/tomcat-juli.jar",
-           "${tomcat::params::home}/${instance}/tomcat/lib/quartz-openejb-shade.jar.jar",
-           "${tomcat::params::home}/${instance}/tomcat/lib/FastInfoset.jar",
-           "${tomcat::params::home}/${instance}/tomcat/lib/el-api.jar",
-           "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm5-shaded.jar"]:
-      ensure => absent,
-    }
     tomcat::tomee::v1_6_0 { $instance: instance => $instance}
   }
 
   if($version == '1.6.0.2') {
+    tomcat::tomee::v1_6_0_2 { $instance: instance => $instance}
+  }
+  
+  if($version == '1.6.0' or $version == '1.6.0.2') {
     file {["${tomcat::params::home}/${instance}/tomcat/bin/tomcat-juli.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/quartz-openejb-shade.jar.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/FastInfoset.jar",
@@ -62,7 +59,6 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
       ensure => absent,
       notify     => Service[$instance],
     }
-    tomcat::tomee::v1_6_0_2 { $instance: instance => $instance}
   }
   
   if($version == '1.7.0') {
@@ -83,7 +79,6 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
         version    => $version,
         notify     => Service[$instance],
     }
-    
     tomcat::tomee::v1_7_0 { $instance: instance => $instance}
   }
 }
