@@ -262,13 +262,6 @@ define tomcat::tomee::v1_7_0 ($instance = $name) {
     version    => '4.4',
   }
   
-  tomcat::lib::maven { "${name}:el-api.jar":
-    groupid    => 'javax.el',
-    artifactid => 'el-api',
-    lib        => 'el-api.jar',
-    version    => '2.2',
-  }
-  
   tomcat::lib::maven { "${name}:FastInfoset.jar":
     groupid    => 'com.sun.xml.fastinfoset',
     artifactid => 'FastInfoset',
@@ -667,6 +660,13 @@ define tomcat::tomee::v1_7_0 ($instance = $name) {
     artifactid => 'sxc-runtime',
     version    => '0.8',
     lib        => 'sxc-runtime.jar',
+  }
+  
+  tomcat::lib::maven { "${name}:tomcat-el-api.jar":
+    groupid    => 'org.apache.tomcat',
+    artifactid => 'tomcat-el-api',
+    version    => '7.0.55',
+    lib        => 'tomcat-el-api.jar',
   }
 
   tomcat::lib::maven { "${name}:tomee-catalina.jar":

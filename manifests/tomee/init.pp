@@ -56,7 +56,8 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
            "${tomcat::params::home}/${instance}/tomcat/lib/quartz-openejb-shade.jar.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/FastInfoset.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/el-api.jar",
-           "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm5-shaded.jar"]:
+           "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm5-shaded.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/tomcat-el-api.jar"]:
       ensure => absent,
       notify     => Service[$instance],
     }
