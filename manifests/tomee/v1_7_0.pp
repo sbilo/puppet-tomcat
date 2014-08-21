@@ -339,6 +339,13 @@ define tomcat::tomee::v1_7_0 ($instance = $name) {
     lib        => 'javaee-api-tomcat.jar',
     classifier => 'tomcat',
   }
+  
+  tomcat::lib::maven { "${name}:jaxb-core.jar":
+    groupid    => 'com.sun.xml.bind',
+    artifactid => 'jaxb-core',
+    version    => '2.2.7',
+    lib        => 'jaxb-core.jar',
+  }
 
   tomcat::lib::maven { "${name}:jaxb-impl.jar":
     groupid    => 'com.sun.xml.bind',

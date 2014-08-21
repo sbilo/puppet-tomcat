@@ -52,6 +52,7 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
   
   if($version == '1.6.0' or $version == '1.6.0.2') {
     file {["${tomcat::params::home}/${instance}/tomcat/bin/tomcat-juli.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/jaxb-core.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/quartz-openejb-shade.jar.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/FastInfoset.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/el-api.jar",
