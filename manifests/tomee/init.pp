@@ -60,6 +60,7 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
            "${tomcat::params::home}/${instance}/tomcat/lib/el-api.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm5-shaded.jar"]:
       ensure => absent,
+      notify     => Service[$instance],
     }
     tomcat::tomee::v1_6_0_2 { $instance: instance => $instance}
   }
@@ -73,12 +74,14 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
            "${tomcat::params::home}/${instance}/tomcat/lib/xml-apis.jar",
            "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm4-shaded.jar"]:
       ensure => absent,
+      notify     => Service[$instance],
     }
 
     maven { "${tomcat::params::home}/${instance}/tomcat/bin/tomcat-juli.jar":
         groupid    => 'org.apache.openejb',
         artifactid => 'tomee-juli',
         version    => $version,
+        notify     => Service[$instance],
     }
     
     tomcat::tomee::v1_7_0 { $instance: instance => $instance}

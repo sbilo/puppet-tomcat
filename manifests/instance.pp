@@ -100,27 +100,34 @@ define tomcat::instance (
   if (!defined(Class[$java_class_name])) {
     class { $java_class_name: }
   }
+  
+  $derived_tomcat_version = $tomee_version ? {
+    undef   => $tomcat_version ? {
+      undef   => $::lsbdistrelease ? {
+        '12.04' => '7.0.26',
+        '14.04' => '7.0.52',
+      },
+      default => $tomcat_version,
+    },
+    '1.6.0'   => '7.0.47',
+    '1.6.0.2' => '7.0.53',
+    '1.7.0'   => '7.0.55',
+  }
 
-  if (!$tomcat_version or $tomcat_version >= '7.0.19') {
+  if ($derived_tomcat_version >= '7.0.19') {
     tomcat::lib::maven { "${name}:tomcat-jdbc":
       instance   => $name,
       lib        => 'tomcat-jdbc.jar',
       groupid    => 'org.apache.tomcat',
       artifactid => 'tomcat-jdbc',
-      version    => $tomcat_version ? {
-        undef    => $::lsbdistrelease ? {
-	  '12.04' => '7.0.26',
-  	  '14.04' => '7.0.52',
-	},
-        default  => $tomcat_version,
-      }
+      version    => $derived_tomcat_version,
     }
   }
 
   Tomcat::Lib::Maven {
     instance => $name,
     groupid  => 'org.apache.tomcat',
-    version  => $tomcat_version,
+    version  => $derived_tomcat_version,
   }
 
   if ($tomcat_version) {
@@ -218,20 +225,20 @@ define tomcat::instance (
       artifactid => 'tomcat-util',
     }
 
-    if ($tomcat_version >= '7.0.47') {
+    if ($derived_tomcat_version >= '7.0.47') {
       tomcat::lib::maven { "${name}:tomcat-websocket-api":
         lib        => 'tomcat-websocket-api.jar',
         artifactid => 'tomcat-websocket-api',
       }
 
-      if ($tomcat_version < '8.0.0') {
+      if ($derived_tomcat_version < '8.0.0') {
         tomcat::lib::maven { "${name}:tomcat7-websocket":
           lib        => 'tomcat7-websocket.jar',
           artifactid => 'tomcat7-websocket',
         }
       }
 
-      if ($tomcat_version >= '8.0.0') {
+      if ($derived_tomcat_version >= '8.0.0') {
         tomcat::lib::maven { "${name}:tomcat-websocket":
           lib        => 'tomcat-websocket.jar',
           artifactid => 'tomcat-websocket',
@@ -288,7 +295,7 @@ define tomcat::instance (
 
   tomcat::web::init { $name:
     ensure         => $ensure,
-    tomcat_version => $tomcat_version,
+    tomcat_version => $derived_tomcat_version,
     notify         => Tomcat::Service[$name],
   }
 
