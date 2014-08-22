@@ -9,14 +9,6 @@
 # Copyright 2013 Proteon.
 #
 define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
-  
-  tomcat::webapp::maven { "${name}:tomee-webaccess.war":
-    instance   => $instance,
-    webapp     => 'tomee',
-    groupid    => 'org.apache.openejb',
-    artifactid => 'tomee-webaccess',
-    version    => $version,
-  }
 
   tomcat::listener { "${name}:org.apache.tomee.catalina.ServerListener":
     instance   => $instance,
@@ -56,5 +48,39 @@ define tomcat::tomee::init ($instance = $name, $version, $ensure = present) {
 
   if($version == '1.6.0.2') {
     tomcat::tomee::v1_6_0_2 { $instance: instance => $instance}
+  }
+  
+  if($version == '1.6.0' or $version == '1.6.0.2') {
+    file {["${tomcat::params::home}/${instance}/tomcat/bin/tomcat-juli.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/jaxb-core.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/quartz-openejb-shade.jar.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/FastInfoset.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/el-api.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm5-shaded.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/tomcat-el-api.jar"]:
+      ensure => absent,
+      notify     => Service[$instance],
+    }
+  }
+  
+  if($version == '1.7.0') {
+    file {["${tomcat::params::home}/${instance}/tomcat/lib/quartz.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/gson.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/serializer.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/xalan.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/xercesImpl.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/xml-apis.jar",
+           "${tomcat::params::home}/${instance}/tomcat/lib/xbean-asm4-shaded.jar"]:
+      ensure => absent,
+      notify     => Service[$instance],
+    }
+
+    maven { "${tomcat::params::home}/${instance}/tomcat/bin/tomcat-juli.jar":
+        groupid    => 'org.apache.openejb',
+        artifactid => 'tomee-juli',
+        version    => $version,
+        notify     => Service[$instance],
+    }
+    tomcat::tomee::v1_7_0 { $instance: instance => $instance}
   }
 }

@@ -24,18 +24,10 @@ define tomcat::web::init (
             require => File["${tomcat::params::home}/${instance}/tomcat/conf"],
         }
 
-	$derived_tomcat_version = $tomcat_version ? {
-    	    undef   => $::lsbdistrelease ? {
-                '12.04' => '7.0.26',
-                '14.04' => '7.0.52',
-	    },
-	    default => $tomcat_version,
-        }
-
         concat::fragment { "Adding Default Serlvet web.xml top content for ${instance}":
             target  => "${tomcat::params::home}/${instance}/tomcat/conf/web.xml",
             order   => 00,
-            content => versioncmp($derived_tomcat_version,'7.0.52') ? {
+            content => versioncmp($tomcat_version,'7.0.52') ? {
                 '-1' 	=> '<?xml version=\'1.0\' encoding=\'utf-8\'?>
 <!DOCTYPE web-app [
     <!ENTITY mime-mappings SYSTEM "web-mime-mappings.xml">
@@ -75,7 +67,7 @@ define tomcat::web::init (
         concat::fragment { "Adding Default Serlvet web.xml file mime-mappings config content for ${instance}":
             target  => "${tomcat::params::home}/${instance}/tomcat/conf/web.xml",
             order   => 97,
-            content => versioncmp($derived_tomcat_version,'7.0.52') ? {
+            content => versioncmp($tomcat_version,'7.0.52') ? {
                 '-1'    => '
     &mime-mappings;
 ',
