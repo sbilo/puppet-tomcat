@@ -33,6 +33,7 @@ define tomcat::listener (
     $class_name,
     $attributes = [],
     $ensure     = present) {
+    include tomcat
     if ($ensure != absent) {
         concat::fragment { "Adding ${class_name} Connector for ${instance}":
             target  => "${tomcat::params::home}/${instance}/tomcat/conf/server-listeners.xml",
