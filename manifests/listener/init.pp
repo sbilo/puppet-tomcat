@@ -11,6 +11,7 @@
 define tomcat::listener::init (
     $instance = $name,
     $ensure   = present,) {
+    include tomcat
     if ($ensure != absent) {
         include concat::setup
 
