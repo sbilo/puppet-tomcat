@@ -148,6 +148,12 @@ define tomcat::instance (
         lib        => 'tomcat-el-api.jar',
         artifactid => 'tomcat-el-api',
       }
+      
+      maven { "${instance_home}/tomcat/bin/tomcat-juli.jar":
+        groupid    => 'org.apache.tomcat',
+        artifactid => 'tomcat-juli',
+        version    => $derived_tomcat_version,
+      }
     }
 
     tomcat::lib::maven { "${name}:tomcat-api":
@@ -243,6 +249,10 @@ define tomcat::instance (
           lib        => 'tomcat-websocket.jar',
           artifactid => 'tomcat-websocket',
         }
+        tomcat::lib::maven { "${name}:tomcat-util-scan":
+          lib        => 'tomcat-util-scan.jar',
+          artifactid => 'tomcat-util-scan',
+        }
       }
     }
   }
@@ -325,10 +335,12 @@ define tomcat::instance (
   if ($jmx_enabled and $jmx_authenticate) {
     tomcat::jmx::init { $name: }
   }
-
-  tomcat::listener { "${name}:org.apache.catalina.core.JasperListener":
-    instance   => $name,
-    class_name => 'org.apache.catalina.core.JasperListener',
+ 
+  if ($derived_tomcat_version < '8.0.0') {
+    tomcat::listener { "${name}:org.apache.catalina.core.JasperListener":
+        instance   => $name,
+        class_name => 'org.apache.catalina.core.JasperListener',
+    }
   }
 
   tomcat::listener { "${name}:org.apache.catalina.core.JreMemoryLeakPreventionListener":
@@ -336,7 +348,7 @@ define tomcat::instance (
     class_name => 'org.apache.catalina.core.JreMemoryLeakPreventionListener',
   }
 
-  if ($tomcat::version < 7) {
+  if ($derived_tomcat_version < '7.0.0') {
     tomcat::listener { "${name}:org.apache.catalina.mbeans.ServerLifecycleListener":
       instance   => $name,
       class_name => 'org.apache.catalina.mbeans.ServerLifecycleListener',
@@ -346,6 +358,19 @@ define tomcat::instance (
   tomcat::listener { "${name}:org.apache.catalina.mbeans.GlobalResourcesLifecycleListener":
     instance   => $name,
     class_name => 'org.apache.catalina.mbeans.GlobalResourcesLifecycleListener',
+  }
+  
+  if ($derived_tomcat_version > '8.0.0') {
+    tomcat::listener { "${name}:org.apache.catalina.core.ThreadLocalLeakPreventionListener":
+      instance    => $name,
+      class_name  => 'org.apache.catalina.core.ThreadLocalLeakPreventionListener',
+    }
+    
+    maven { "${instance_home}/tomcat/bin/commons-daemon.jar":
+        groupid    => 'commons-daemon',
+        artifactid => 'commons-daemon',
+        version    => '1.0.15',
+    }
   }
 
   file { [
