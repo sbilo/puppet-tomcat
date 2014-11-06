@@ -49,6 +49,7 @@ define tomcat::instance (
     $min_heap          = '1024m',
     $min_perm          = '384m',
     $max_perm          = '384m',
+    $java_opts         = false,
     $unpack_wars       = true,
     $auto_deploy       = true,
     $deploy_on_startup = true,
@@ -241,7 +242,6 @@ define tomcat::instance (
         home     => $instance_home,
         password => '!',
         comment  => "${name} instance user",
-        shell    => '/bin/bash'
     }
 
     file { "/etc/tomcat.d/${name}":

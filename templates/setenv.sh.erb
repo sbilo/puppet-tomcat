@@ -6,3 +6,6 @@ export CATALINA_OPTS="${CATALINA_OPTS} -Dcom.sun.management.jmxremote.password.f
 <% if pidfile_enabled %>
 export CATALINA_PID="${CATALINA_BASE}/work/catalina.pid"
 <% end %>
+<% if java_opts %>
+export JAVA_OPTS="${JAVA_OPTS} <%= java_opts %>"
+<% end %>
