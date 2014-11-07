@@ -165,7 +165,7 @@ case $1 in
 	fi
 ;;
 	restart)
-	timeout="5"
+	timeout="30"
       	if [[  "${2}" =~ "--instance=" ]]; then
                 tomcat="${2}"
                 tomcat="${tomcat##--instance=}"
