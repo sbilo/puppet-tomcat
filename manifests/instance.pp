@@ -53,6 +53,7 @@ define tomcat::instance (
     $unpack_wars       = true,
     $auto_deploy       = true,
     $deploy_on_startup = true,
+    $priority          = undef,
     $ensure            = present,) {
     include tomcat
 
@@ -244,7 +245,12 @@ define tomcat::instance (
         comment  => "${name} instance user",
     }
 
-    file { "/etc/tomcat.d/${name}":
+    if $priority {
+        $instance_file_name = "${priority}@${name}"
+    } else {
+        $instance_file_name = $name
+    }
+    file { "/etc/tomcat.d/${instance_file_name}":
         ensure  => $ensure,
         content => '',
         require => User[$name],

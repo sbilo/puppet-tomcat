@@ -112,7 +112,7 @@ if [ -z "/etc/tomcat.d" ]; then
         die "includedir unknown. $errmsg"
         else
         # guess instance names
-        tomcats=$( ls /etc/tomcat.d/ | egrep '^[._/[:alnum:]-]+$' )
+        tomcats=$( ls /etc/tomcat.d/ | egrep -o '[._/[:alnum:]-]+$' )
         if [ "${i#tomcats[@]}" == "0" ]; then
                 die "no config files found in $includedir. sorry"
         fi
@@ -151,7 +151,7 @@ case $1 in
                 tomcat="${tomcat##--instance=}"
                 stop     
         elif [[ "`dirname $0`" =~ (/etc/init.d|/etc/rc[0-9].d) ]]; then
-		for tomcat in ${tomcats}; do
+		for tomcat in $(echo ${tomcats} | tac -s " "); do
                         stop
                 done
         else 
