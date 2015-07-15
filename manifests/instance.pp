@@ -116,9 +116,11 @@ define tomcat::instance (
         tomcat::jmx::init { $name: }
     }
 
-    tomcat::listener { "${name}:org.apache.catalina.core.JasperListener":
-        instance   => $name,
-        class_name => 'org.apache.catalina.core.JasperListener',
+    if ($tomcat::version < 8) {
+        tomcat::listener { "${name}:org.apache.catalina.core.JasperListener":
+            instance   => $name,
+            class_name => 'org.apache.catalina.core.JasperListener',
+        }
     }
 
     tomcat::listener { "${name}:org.apache.catalina.core.JreMemoryLeakPreventionListener":
