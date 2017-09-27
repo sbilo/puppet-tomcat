@@ -244,12 +244,13 @@ define tomcat::instance (
 
     if $user_id {
       user { $name:
-          ensure   => present,
-          uid      => $user_id,
-          groups   => $user_groups,
-          home     => $instance_home,
-          password => '!',
-          comment  => "${name} instance user",
+          ensure    => present,
+          allowdupe => true,
+          uid       => $user_id,
+          groups    => $user_groups,
+          home      => $instance_home,
+          password  => '!',
+          comment   => "${name} instance user",
       }
     } else {
         user { $name:
