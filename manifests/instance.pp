@@ -54,7 +54,9 @@ define tomcat::instance (
     $auto_deploy       = true,
     $deploy_on_startup = true,
     $priority          = undef,
-    $ensure            = present,) {
+    $ensure            = present,
+    $user_id           = undef,
+    $user_groups       = [],) {
     include tomcat
 
     $instance_home = "${tomcat::params::home}/${name}"
@@ -240,11 +242,22 @@ define tomcat::instance (
         mode    => '0740',
     }
 
-    user { $name:
-        ensure   => present,
-        home     => $instance_home,
-        password => '!',
-        comment  => "${name} instance user",
+    if $user_id {
+      user { $name:
+          ensure   => present,
+          uid      => $user_id,
+          groups   => $user_groups,
+          home     => $instance_home,
+          password => '!',
+          comment  => "${name} instance user",
+      }
+    } else {
+        user { $name:
+            ensure   => present,
+            home     => $instance_home,
+            password => '!',
+            comment  => "${name} instance user",
+        }
     }
 
     if $priority {
