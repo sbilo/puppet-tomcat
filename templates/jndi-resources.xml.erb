@@ -1,5 +1,5 @@
-<Resource name="<%= resource_name %>" type="<%= resource_type %>" 
-  <% attributes.each do |hash| -%>
+<Resource name="<%= @resource_name %>" type="<%= @resource_type %>"
+  <% @attributes.each do |hash| -%>
   <% hash.keys.each do |key| -%>
   	<%= key %>="<%= hash[key] %>"
   <% end -%>
