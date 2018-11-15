@@ -1,4 +1,4 @@
-# == Class: Tomcat 
+# == Class: Tomcat
 #
 # === Parameters
 #
@@ -21,7 +21,7 @@
 # Copyright 2013 Proteon.
 #
 class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
-    
+
     include concat::setup
 
     package {[
@@ -44,6 +44,7 @@ class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
         source => 'puppet:///modules/tomcat/tomcat',
         owner  => 'root',
         group  => 'root',
+        mode   => '0755',
     }
 
     file { '/usr/sbin/tomcat':
