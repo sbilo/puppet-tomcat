@@ -55,6 +55,7 @@ define tomcat::instance (
     $deploy_on_startup = true,
     $priority          = undef,
     $ensure            = present,
+    $use_catalina_sh_with_systemd_cat = false,
     $user_id           = undef,
     $user_groups       = [],) {
     include tomcat
@@ -159,10 +160,16 @@ define tomcat::instance (
         notify => Tomcat::Service[$name],
     }
 
+    if ($use_catalina_sh_with_systemd_cat) {
+        $catalina_sh_src = "puppet:///modules/tomcat/catalina.sh-systemd-cat"
+    } else {
+        $catalina_sh_src = "/usr/share/tomcat${tomcat::version}/bin/catalina.sh"
+    }
+
     # For using apparmor profiles per instance it needs a file instead of a symlink
     file { "${instance_home}/tomcat/bin/catalina.sh":
         ensure => file,
-        source => "/usr/share/tomcat${tomcat::version}/bin/catalina.sh",
+        source => $catalina_sh_src,
         owner  => 'root',
         group  => 'root',
         mode   => '755',
