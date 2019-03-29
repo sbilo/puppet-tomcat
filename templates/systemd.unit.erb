@@ -9,7 +9,7 @@ Environment="CATALINA_TMPDIR=/opt/tomcat/sites/<%= @name %>/tomcat/temp"
 
 # Lifecycle
 Type=simple
-ExecStart=/bin/sh /opt/tomcat/sites/<%= @name %>/tomcat/bin/startup.sh
+ExecStart=/bin/sh /opt/tomcat/sites/<%= @name %>/tomcat/bin/catalina.sh run
 SuccessExitStatus=143
 
 # Logging

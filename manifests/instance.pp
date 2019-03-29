@@ -192,14 +192,9 @@ define tomcat::instance (
         notify => Tomcat::Service[$name],
     }
 
-    $startup_src = $svc_provider ? {
-        'systemd' => "puppet:///modules/tomcat/tomcat_startup.sh_for_systemd",
-        default   => "/usr/share/tomcat${tomcat::version}/bin/startup.sh",
-    }
-
     file { "${instance_home}/tomcat/bin/startup.sh":
         ensure => file, # file instead of a link so it uses the instance catalina.sh
-        source => $startup_src,
+        source => "/usr/share/tomcat${tomcat::version}/bin/startup.sh",
         owner  => 'root',
         group  => 'root',
         mode   => '755',
