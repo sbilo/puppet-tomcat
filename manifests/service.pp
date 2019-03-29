@@ -23,14 +23,6 @@ define tomcat::service (
       hasstatus  => false,
     }
   } elsif ($provider == 'systemd') {
-    file { "/opt/tomcat/sites/${name}/tomcat/bin/startup.sh":
-      ensure => present,
-      source => "puppet:///modules/tomcat/tomcat_startup.sh_for_systemd",
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0755',
-
-    }->
     file {"/etc/systemd/system/${name}.service":
       ensure => 'present',
       content => template('tomcat/systemd.unit.erb'),
