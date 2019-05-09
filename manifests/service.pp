@@ -31,7 +31,15 @@ define tomcat::service (
       ensure   => 'running',
       enable   => true,
       provider => 'systemd',
-    }    
+    }
+    service { 'tomcat':
+      ensure => 'stopped',
+      enable => false,
+    }
+    service { 'tomcat8':
+      ensure => 'stopped',
+      enable => false,
+    }
   } else {
     fail("Not implemented!")
   }
