@@ -36,10 +36,6 @@ define tomcat::service (
       ensure => 'stopped',
       enable => false,
     }
-    service { 'tomcat8':
-      ensure => 'stopped',
-      enable => false,
-    }
   } else {
     fail("Not implemented!")
   }
