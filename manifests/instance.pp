@@ -245,6 +245,10 @@ define tomcat::instance (
     }
 
     if $user_id {
+      group { $name:
+          ensure => present,
+          gid    => $user_id,
+      }->
       user { $name:
           ensure    => present,
           allowdupe => true,
