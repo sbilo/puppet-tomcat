@@ -12,6 +12,11 @@ Type=simple
 ExecStart=/bin/sh /opt/tomcat/sites/<%= @name %>/tomcat/bin/catalina.sh run
 SuccessExitStatus=143
 
+<% if @systemd_restart %>
+Restart=always
+RestartSec=5
+<% end %>
+
 # Logging
 SyslogIdentifier=<%= @name %>
 

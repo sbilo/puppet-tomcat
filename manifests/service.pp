@@ -9,8 +9,9 @@
 # Copyright 2013 Proteon.
 #
 define tomcat::service (
-  $ensure   = 'running',
-  $provider = 'base',
+  $ensure          = 'running',
+  $provider        = 'base',
+  $systemd_restart = false,
 ) {
   if ($provider == 'base') {
     service { $name:

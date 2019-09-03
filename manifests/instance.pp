@@ -56,6 +56,7 @@ define tomcat::instance (
     $priority          = undef,
     $ensure            = present,
     $svc_provider      = 'base',
+    $systemd_restart   = false,
     $user_id           = undef,
     $user_groups       = [],) {
     include tomcat
@@ -68,7 +69,8 @@ define tomcat::instance (
             absent  => 'stopped',
             default => 'running',
         },
-        provider => $svc_provider,
+        provider        => $svc_provider,
+        systemd_restart => $systemd_restart,
     }
 
     tomcat::connector::init { $name:
