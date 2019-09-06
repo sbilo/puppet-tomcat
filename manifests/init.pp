@@ -54,12 +54,15 @@ class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
         group  => 'root',
     }
 
-    service { "tomcat${version}":
-        ensure  => stopped,
-        pattern => "/var/lib/tomcat${version}",
-        enable  => false,
-        require => Package["tomcat${version}"],
+    if $version <= 8 {
+      service { "tomcat${version}":
+          ensure  => stopped,
+          pattern => "/var/lib/tomcat${version}",
+          enable  => false,
+          require => Package["tomcat${version}"],
+      }
     }
+
 
     profile_d::script { 'CATALINA_HOME.sh':
         ensure  => present,

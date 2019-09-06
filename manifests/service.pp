@@ -12,6 +12,7 @@ define tomcat::service (
   $ensure          = 'running',
   $provider        = 'base',
   $systemd_restart = false,
+  $version         = 8,
 ) {
   if ($provider == 'base') {
     service { $name:
