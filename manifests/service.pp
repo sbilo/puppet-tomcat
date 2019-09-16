@@ -35,8 +35,9 @@ define tomcat::service (
       provider => 'systemd',
     }
     service { 'tomcat':
-      ensure => 'stopped',
-      enable => false,
+      ensure   => 'stopped',
+      enable   => false,
+      provider => 'systemd',
     }
   } else {
     fail("Not implemented!")
