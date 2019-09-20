@@ -3,7 +3,7 @@ Description=Apache Tomcat Web Application (<%= @name %>)
 After=network.target
 
 [Service]
-Environment="CATALINA_HOME=/usr/share/tomcat8"
+Environment="CATALINA_HOME=/usr/share/tomcat<%= @version %>"
 Environment="CATALINA_BASE=/opt/tomcat/sites/<%= @name %>/tomcat"
 Environment="CATALINA_TMPDIR=/opt/tomcat/sites/<%= @name %>/tomcat/temp"
 

@@ -58,7 +58,9 @@ define tomcat::instance (
     $svc_provider      = 'base',
     $systemd_restart   = false,
     $user_id           = undef,
-    $user_groups       = [],) {
+    $user_groups       = [],
+    $version           = 8,
+ ) {
     include tomcat
 
     $instance_home = "${tomcat::params::home}/${name}"
@@ -71,6 +73,7 @@ define tomcat::instance (
         },
         provider        => $svc_provider,
         systemd_restart => $systemd_restart,
+        version         => $version,
     }
 
     tomcat::connector::init { $name:

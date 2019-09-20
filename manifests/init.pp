@@ -24,14 +24,40 @@ class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
 
     include concat::setup
 
-    package {[
-        "tomcat${version}",
-        'libtcnative-1',
-        'liblog4j1.2-java',
-        'libcommons-logging-java',
-    ]:
-        ensure => installed,
-    } -> Tomcat::Instance <||>
+    if (versioncmp($facts['os']['distro']['release']['major'], '9') == 0 and $version == 9) {
+      # Add needed user/group as it's not created automatically *sigh*
+      group { 'tomcat' :
+        ensure => present,
+        system => true,
+      } ->
+      user { 'tomcat' :
+        ensure => present,
+        system => true,
+        gid    => 'tomcat',
+      }
+
+      # Install tomcat9 from stretch-backports if needed
+      package {[
+          "tomcat${version}",
+          'libtcnative-1',
+          'liblog4j1.2-java',
+          'libcommons-logging-java',
+      ]:
+          ensure            => installed,
+          install_options   => ["-t","${::lsbdistcodename}-backports"],
+          require           => User['tomcat'],
+      } -> Tomcat::Instance <||>
+    } else {
+      package {[
+          "tomcat${version}",
+          'libtcnative-1',
+          'liblog4j1.2-java',
+          'libcommons-logging-java',
+      ]:
+          ensure            => installed,
+      } -> Tomcat::Instance <||>
+    }
+
 
     file { [$tomcat::params::root, $tomcat::params::home, '/etc/tomcat.d/',]:
         ensure => directory,
@@ -54,11 +80,12 @@ class tomcat ($version = $tomcat::params::version) inherits tomcat::params {
         group  => 'root',
     }
 
-    service { "tomcat${version}":
-        ensure  => stopped,
-        pattern => "/var/lib/tomcat${version}",
-        enable  => false,
-        require => Package["tomcat${version}"],
+    service { "tomcat${version}" :
+        ensure   => stopped,
+        pattern  => "/var/lib/tomcat${version}",
+        enable   => false,
+        provider => 'systemd',
+        require  => Package["tomcat${version}"],
     }
 
     profile_d::script { 'CATALINA_HOME.sh':

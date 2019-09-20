@@ -12,6 +12,7 @@ define tomcat::service (
   $ensure          = 'running',
   $provider        = 'base',
   $systemd_restart = false,
+  $version         = 8,
 ) {
   if ($provider == 'base') {
     service { $name:
@@ -34,8 +35,9 @@ define tomcat::service (
       provider => 'systemd',
     }
     service { 'tomcat':
-      ensure => 'stopped',
-      enable => false,
+      ensure   => 'stopped',
+      enable   => false,
+      provider => 'systemd',
     }
   } else {
     fail("Not implemented!")
